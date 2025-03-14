@@ -34,9 +34,9 @@ float starSDF(vec2 st) {
     bool isInsideY1 = pointX <= y1X && pointY <= y1Y; 
     bool isInsideY2 = pointX <= y2X && pointY <= y2Y;
     if (isInsideY1 || isInsideY2) {
-        return 0.0;
+        return 1.0;
     }
-    return 1.0;
+    return .0;
 }
 
 void main() {
