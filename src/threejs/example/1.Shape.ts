@@ -13,7 +13,6 @@ void main() {
 `;
 
 const fragmentShader = /* glsl */ `
-uniform float u_shape; // 控制显示的形状：0-圆形, 1-五角星, 2-月亮
 
 varying vec2 textureCoord;
 
@@ -63,19 +62,9 @@ const geometry = new THREE.PlaneGeometry(1, 1);
 const material = new THREE.ShaderMaterial({
     vertexShader,
     fragmentShader,
-    uniforms: {
-        u_shape: { value: 0.0 },
-    },
     side: THREE.DoubleSide,
     transparent: true,
 });
 
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
-
-// 动画效果：每3秒切换一次形状
-let currentShape = 0;
-setInterval(() => {
-    currentShape = (currentShape + 1) % 3;
-    material.uniforms.u_shape.value = currentShape;
-}, 3000);
