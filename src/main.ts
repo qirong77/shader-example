@@ -1,3 +1,3 @@
 import './style.css'
 import './threejs/common/index'
-import './threejs/example/grid'
+import './threejs/example/0.QuickStart'
