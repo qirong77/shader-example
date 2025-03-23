@@ -2,6 +2,7 @@
  * @file QuickStart.ts
  * @description 着色器基础示例，展示了顶点着色器和片元着色器的基本用法
  */
+
 import { scene, THREE } from "../common/main";
 
 /**
