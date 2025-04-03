@@ -26,38 +26,20 @@ geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 const material = new THREE.ShaderMaterial({
     uniforms: {
         uTime: { value: 0 },
-        uStarSize: { value: 8.0 },
-        uTwinkleSpeed: { value: 1.0 }
+        uStarSize: { value: 10.0 },
     },
     vertexShader: `
         uniform float uTime;
         uniform float uStarSize;
-        varying vec3 vColor;
-
-        // 伪随机函数
-        float random(vec3 pos) {
-            return fract(sin(dot(pos, vec3(12.9898, 78.233, 45.5432))) * 43758.5453);
-        }
-
         void main() {
-            // 使用位置生成随机颜色
-            vColor = vec3(
-                random(position + vec3(1.0, 0.0, 0.0)),
-                random(position + vec3(0.0, 1.0, 0.0)),
-                random(position + vec3(0.0, 0.0, 1.0))
-            );
-
             gl_PointSize = uStarSize;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
     `,
     fragmentShader: `
-        uniform float uTime;
-        varying vec3 vColor;
-
         void main() {
-            // 使用顶点着色器传来的随机颜色
-            gl_FragColor = vec4(vColor, 1.0);
+            float alpha = 1.0 - length(gl_PointCoord - vec2(0.5)) * 2.0;
+            gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
         }
     `,
     transparent: true
@@ -68,8 +50,7 @@ const mesh = new THREE.Points(geometry, material);
 scene.add(mesh);
 
 // 添加 GUI 控制
-folder.add(material.uniforms.uStarSize, "value", 0.1, 10.0).name("星星大小");
-folder.add(material.uniforms.uTwinkleSpeed, "value", 0.1, 5.0).name("闪烁速度");
+folder.add(material.uniforms.uStarSize, "value", 1, 15.0).name("星星大小");
 
 // 让盒子绕 x 轴旋转
 function animate() {
