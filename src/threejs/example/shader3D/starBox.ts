@@ -32,15 +32,32 @@ const material = new THREE.ShaderMaterial({
     vertexShader: `
         uniform float uTime;
         uniform float uStarSize;
+        varying vec3 vColor;
+
+        // 伪随机函数
+        float random(vec3 pos) {
+            return fract(sin(dot(pos, vec3(12.9898, 78.233, 45.5432))) * 43758.5453);
+        }
+
         void main() {
+            // 使用位置生成随机颜色
+            vColor = vec3(
+                random(position + vec3(1.0, 0.0, 0.0)),
+                random(position + vec3(0.0, 1.0, 0.0)),
+                random(position + vec3(0.0, 0.0, 1.0))
+            );
+
             gl_PointSize = uStarSize;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
     `,
     fragmentShader: `
         uniform float uTime;
+        varying vec3 vColor;
+
         void main() {
-            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+            // 使用顶点着色器传来的随机颜色
+            gl_FragColor = vec4(vColor, 1.0);
         }
     `,
     transparent: true
