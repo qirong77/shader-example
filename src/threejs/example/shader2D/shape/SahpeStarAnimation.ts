@@ -1,14 +1,5 @@
-<<<<<<< HEAD:src/threejs/example/1.3SahpeStarAnimation.ts
-/**
- * @file SahpeStarAnimation.ts
- * @description 使用着色器实现四角星图案的绘制，并添加了渐变动画效果
- */
-import { gui } from "../common/gui";
-import { scene, THREE } from "../common/main";
-=======
 import { gui } from "../../../common/gui";
 import { scene, THREE } from "../../../common/main";
->>>>>>> cd49ec3 (refactor: 重构代码):src/threejs/example/shader2D/shape/SahpeStarAnimation.ts
 
 /**
  * @description 顶点着色器代码

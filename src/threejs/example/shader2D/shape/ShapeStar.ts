@@ -1,15 +1,6 @@
-<<<<<<< HEAD:src/threejs/example/1.2.ShapeStar.ts
-/**
- * @file ShapeStar.ts
- * @description 使用着色器实现四角星图案的绘制，通过 GUI 控制参数实现图形的动态调整
- */
-import { gui } from "../common/gui";
-import { scene, THREE } from "../common/main";
-=======
 import { gui } from "../../../common/gui";
 import { scene, THREE } from "../../../common/main";
 
->>>>>>> cd49ec3 (refactor: 重构代码):src/threejs/example/shader2D/shape/ShapeStar.ts
 
 /**
  * @description 顶点着色器代码

@@ -3,7 +3,9 @@
  * @description 使用着色器实现基础图形的绘制，包括圆形、五角星和月亮等形状。
  * 通过 SDF（有符号距离场）技术来实现图形的渲染。
  */
-import { scene, THREE } from "../common/main";
+
+import { scene, THREE } from "../../../common/main";
+
 
 /* 
  * 距离场（Distance Field, DF）技术是一种用于表示空间中点到最近物体表面距离的数学方法。

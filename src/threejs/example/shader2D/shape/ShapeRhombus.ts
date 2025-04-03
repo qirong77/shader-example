@@ -1,13 +1,5 @@
-<<<<<<< HEAD:src/threejs/example/1.1.ShapeRhombus.ts
-/**
- * @file ShapeRhombus.ts
- * @description 使用着色器实现菱形图案的绘制
- */
-import { scene, THREE } from "../common/main";
-=======
 import { scene, THREE } from "../../../common/main";
 
->>>>>>> cd49ec3 (refactor: 重构代码):src/threejs/example/shader2D/shape/ShapeRhombus.ts
 
 /**
  * @description 顶点着色器代码
