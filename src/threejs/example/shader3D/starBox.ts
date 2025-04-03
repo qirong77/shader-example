@@ -31,21 +31,44 @@ const material = new THREE.ShaderMaterial({
         uTime: { value: 0 },
         uStarSize: { value: 10.0 },
         uStarColor: { value: new THREE.Color(1.0, 1.0, 1.0) },
+        uTwinkleSpeed: { value: 1.0 },
+        uTwinkleIntensity: { value: 0.5 },
     },
     vertexShader: `
         uniform float uTime;
         uniform float uStarSize;
+        uniform float uTwinkleIntensity;
         attribute float size;
+        varying float vBrightness;
+        
+        // 简单的伪随机函数
+        float random(vec3 scale, float seed) {
+            return fract(sin(dot(gl_Position.xyz + seed, scale)) * 43758.5453 + seed);
+        }
+        
         void main() {
-            gl_PointSize = uStarSize * size;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_Position = projectionMatrix * mvPosition;
+            
+            // 基于位置和时间的闪烁效果
+            float randomOffset = random(vec3(12.9898, 78.233, 37.719), length(position));
+            float twinkle = sin(uTime + randomOffset * 100.0) * 0.5 + 0.5;
+            vBrightness = mix(1.0, twinkle, uTwinkleIntensity);
+            
+            gl_PointSize = uStarSize * size * vBrightness;
         }
     `,
     fragmentShader: `
         uniform vec3 uStarColor;
+        varying float vBrightness;
+        
         void main() {
-            float alpha = 1.0 - length(gl_PointCoord - vec2(0.5)) * 2.0;
-            gl_FragColor = vec4(uStarColor, alpha);
+            float distance = length(gl_PointCoord - vec2(0.5));
+            float alpha = 1.0 - distance * 2.0;
+            
+            // 应用亮度变化
+            vec3 finalColor = uStarColor * vBrightness;
+            gl_FragColor = vec4(finalColor, alpha);
         }
     `,
     transparent: true
@@ -57,6 +80,8 @@ scene.add(mesh);
 
 // 添加 GUI 控制
 folder.add(material.uniforms.uStarSize, "value", 1, 15.0).name("基础星星大小");
+folder.add(material.uniforms.uTwinkleSpeed, "value", 0.1, 5.0).name("闪烁速度");
+folder.add(material.uniforms.uTwinkleIntensity, "value", 0, 1.0).name("闪烁强度");
 folder.addColor({ color: '#ffffff' }, 'color')
     .name('星星颜色')
     .onChange((value) => {
@@ -65,8 +90,11 @@ folder.addColor({ color: '#ffffff' }, 'color')
 
 // 让盒子绕 x 轴旋转
 function animate() {
+    // 更新时间，用于闪烁效果
     material.uniforms.uTime.value += 0.01 * material.uniforms.uTwinkleSpeed.value;
+    // 缓慢旋转
     mesh.rotation.x += 0.0001;
+    mesh.rotation.y += 0.00005;
     requestAnimationFrame(animate);
 }
 animate();
