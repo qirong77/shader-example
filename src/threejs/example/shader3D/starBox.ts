@@ -26,7 +26,7 @@ geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 const material = new THREE.ShaderMaterial({
     uniforms: {
         uTime: { value: 0 },
-        uStarSize: { value: 1.0 },
+        uStarSize: { value: 8.0 },
         uTwinkleSpeed: { value: 1.0 }
     },
     vertexShader: `
@@ -34,7 +34,7 @@ const material = new THREE.ShaderMaterial({
         uniform float uStarSize;
         varying float vTwinkle;
         void main() {
-            vTwinkle = abs(sin(uTime + position.x * 0.1 + position.y * 0.1));
+            vTwinkle = 1.0;
             gl_PointSize = uStarSize;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
@@ -54,13 +54,13 @@ const mesh = new THREE.Points(geometry, material);
 scene.add(mesh);
 
 // 添加 GUI 控制
-folder.add(material.uniforms.uStarSize, "value", 0.1, 5.0).name("星星大小");
+folder.add(material.uniforms.uStarSize, "value", 0.1, 10.0).name("星星大小");
 folder.add(material.uniforms.uTwinkleSpeed, "value", 0.1, 5.0).name("闪烁速度");
 
 // 让盒子绕 x 轴旋转
 function animate() {
     material.uniforms.uTime.value += 0.01 * material.uniforms.uTwinkleSpeed.value;
-    mesh.rotation.x += 0.01;
+    mesh.rotation.x += 0.0001;
     requestAnimationFrame(animate);
 }
 animate();
