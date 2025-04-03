@@ -6,10 +6,10 @@
 import { scene, THREE } from "../common/main";
 
 /**
- * @description Three.js WebGL 程序中的内置变量说明
- * @see {@link https://threejs.org/docs/index.html#api/en/renderers/webgl/WebGLProgram}
+ * @description 顶点着色器代码
+ * @type {string}
  * 
- * @typedef {Object} ShaderBuiltins
+ * @description 顶点着色器中可用的内置变量说明
  * @property {vec4} gl_Position - 顶点着色器输出的裁剪空间坐标
  * @property {float} gl_PointSize - 点精灵大小
  * @property {mat4} modelMatrix - 模型矩阵
@@ -21,11 +21,6 @@ import { scene, THREE } from "../common/main";
  * @property {vec3} position - 顶点位置属性
  * @property {vec3} normal - 顶点法线属性
  * @property {vec2} uv - 顶点纹理坐标属性
- */
-
-/**
- * @description 顶点着色器代码
- * @type {string}
  */
 const vertexShader = /* glsl */ `
 /**
@@ -45,6 +40,13 @@ void main() {
 /**
  * @description 片元着色器代码
  * @type {string}
+ * 
+ * @description 片元着色器中可用的内置变量说明
+ * @property {vec2} gl_PointCoord - 点精灵内部的坐标，范围在[0,1]之间
+ * @property {vec4} gl_FragCoord - 片元在窗口坐标系中的位置，包含深度值
+ * @property {float} gl_FragDepth - 片元的深度值，可读写
+ * @property {vec4} gl_FragColor - 片元着色器输出的颜色值，包含RGBA四个分量
+ * @property {vec4} gl_FrontFacing - 布尔值，表示当前片元是否属于正面
  */
 const fragmentShader = /* glsl */ `
 /**
@@ -63,26 +65,14 @@ void main() {
 }
 `;
 
-/**
- * @description 创建一个平面几何体
- * @type {THREE.PlaneGeometry}
- */
-const geometry = new THREE.PlaneGeometry(1, 1);
 
-/**
- * @description 创建着色器材质
- * @type {THREE.ShaderMaterial}
- */
+
+const geometry = new THREE.PlaneGeometry(1, 1);
 const material = new THREE.ShaderMaterial({
     vertexShader,
     fragmentShader,
     side: THREE.DoubleSide,  // 双面渲染
     transparent: true,       // 启用透明
 });
-
-/**
- * @description 创建网格对象并添加到场景中
- * @type {THREE.Mesh}
- */
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
