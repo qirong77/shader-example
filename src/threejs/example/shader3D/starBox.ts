@@ -32,18 +32,15 @@ const material = new THREE.ShaderMaterial({
     vertexShader: `
         uniform float uTime;
         uniform float uStarSize;
-        varying float vTwinkle;
         void main() {
-            vTwinkle = 1.0;
             gl_PointSize = uStarSize;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
     `,
     fragmentShader: `
-        varying float vTwinkle;
+        uniform float uTime;
         void main() {
-            float alpha = vTwinkle;
-            gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
         }
     `,
     transparent: true
