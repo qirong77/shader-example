@@ -76,8 +76,8 @@ const geometry = new THREE.PlaneGeometry(1, 1);
 const material = new THREE.ShaderMaterial({
     vertexShader,
     fragmentShader,
-    side: THREE.DoubleSide,
-    transparent: true,
+    side: THREE.DoubleSide,  // 双面渲染
+    transparent: true,       // 启用透明
 });
 
 /**
