@@ -61,7 +61,7 @@ scene.add(mesh);
 folder.add(material.uniforms.u_scanWidth, "value", 0.01, 0.5).name("扫描宽度");
 folder.add(material.uniforms.u_scanSpeed, "value", 0.1, 3.0).name("扫描速度");
 folder.add(material.uniforms.u_scanIntensity, "value", 0.1, 5.0).name("扫描强度");
-folder.add(material.uniforms.u_scanSmoothness, "value", 0.001, 0.2).name("扫描柔和度");
+folder.add(material.uniforms.u_scanSmoothness, "value", 0., 0.5).name("扫描柔和度");
 
 // 更新动画
 function animate() {
