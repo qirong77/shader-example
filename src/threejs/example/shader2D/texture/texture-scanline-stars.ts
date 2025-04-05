@@ -1,6 +1,7 @@
-import { scene, THREE } from "../../common/main";
-import texturePath from "../../../../public/assets/texture.png";
-import { gui } from "../../common/gui";
+import { scene, THREE } from "../../../common/main";
+import texturePath from "../../../../../public/assets/texture.png";
+
+import { gui } from "../../../common/gui";
 const plane = new THREE.PlaneGeometry(1, 1);
 const texture = new THREE.TextureLoader().load(texturePath);
 const folder = gui.addFolder("texture");

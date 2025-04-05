@@ -66,7 +66,6 @@ const material = new THREE.ShaderMaterial({
 
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
-
 // 动画循环
 function animate() {
     requestAnimationFrame(animate);
