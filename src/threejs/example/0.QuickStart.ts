@@ -55,8 +55,11 @@ const fragmentShader = /* glsl */ `
 varying vec2 textureCoord;
 
 void main() {
-    // 使用纹理坐标的 x 分量作为灰度值，展示 uv 坐标在 [0,1] 范围内的变化
-    gl_FragColor = vec4(textureCoord.x, textureCoord.x, textureCoord.x, 1.0);
+    // 使用纹理坐标生成随机的RGB颜色
+    float r = fract(sin(textureCoord.x * 12.9898) * 43758.5453);
+    float g = fract(sin(textureCoord.y * 78.233) * 43758.5453);
+    float b = fract(sin((textureCoord.x + textureCoord.y) * 43.4829) * 43758.5453);
+    gl_FragColor = vec4(r, g, b, 1.0);
 }
 `;
 
