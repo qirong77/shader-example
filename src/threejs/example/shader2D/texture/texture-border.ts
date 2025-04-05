@@ -7,6 +7,10 @@ const folder = gui.addFolder("texture-border");
 const material = new THREE.ShaderMaterial({
     uniforms: {
         u_time: { value: 0 },
+        u_borderWidth: { value: 0.01 },
+        u_borderColor: { value: new THREE.Color(0xffffff) },
+        u_borderSmoothness: { value: 0.01 },
+        u_borderRadius: { value: 0.1 },
         u_texture: { value: texture },
     },
     vertexShader: /* glsl */ `
@@ -24,6 +28,12 @@ const material = new THREE.ShaderMaterial({
     uniform sampler2D u_texture;
     uniform float u_time;
     void main(){
+        vec2 st = v_uv;
+        st = st * 2.0 - 1.0;  // 将坐标范围调整为[-1,1]
+        // 计算距离中心点的距离
+        float distance = length(st);
+        // 判断是否在边框内
+        
         vec4 text_color = texture2D(u_texture, v_uv);
         gl_FragColor = vec4(text_color.rgb, text_color.a);
     }
