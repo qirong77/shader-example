@@ -57,11 +57,6 @@ varying vec2 textureCoord;
 void main() {
     // 使用纹理坐标的 x 分量作为灰度值，展示 uv 坐标在 [0,1] 范围内的变化
     gl_FragColor = vec4(textureCoord.x, textureCoord.x, textureCoord.x, 1.0);
-    // 以下是其他可选的效果：
-    // 使用 fract 函数获取小数部分
-    // gl_FragColor = vec4(fract(textureCoord.x), fract(textureCoord.x), fract(textureCoord.x), 1.0);
-    // 使用 floor 函数获取整数部分
-    // gl_FragColor = vec4(floor(textureCoord.x), floor(textureCoord.x), floor(textureCoord.x), 1.0);
 }
 `;
 
