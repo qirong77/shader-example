@@ -3,7 +3,6 @@ import texturePath from "../../../../../public/assets/texture.png";
 import { gui } from "../../../common/gui";
 const plane = new THREE.PlaneGeometry(1, 1);
 const texture = new THREE.TextureLoader().load(texturePath);
-const folder = gui.addFolder("texture-border");
 const material = new THREE.ShaderMaterial({
     uniforms: {
         u_time: { value: 0 },
@@ -27,15 +26,23 @@ const material = new THREE.ShaderMaterial({
     varying vec2 v_uv;
     uniform sampler2D u_texture;
     uniform float u_time;
+    uniform float u_borderWidth;
+    uniform float u_borderColor;
+    uniform float u_borderSmoothness;
+    uniform float u_borderRadius;
     void main(){
         vec2 st = v_uv;
         st = st * 2.0 - 1.0;  // 将坐标范围调整为[-1,1]
         // 计算距离中心点的距离
         float distance = length(st);
         // 判断是否在边框内
+        float radius = 1.0 - u_borderRadius;
+        float borderStart = radius - u_borderWidth;
+        float alpha = smoothstep(radius + u_borderSmoothness, radius, distance) * 
+                     smoothstep(borderStart - u_borderSmoothness, borderStart, distance);
         
         vec4 text_color = texture2D(u_texture, v_uv);
-        gl_FragColor = vec4(text_color.rgb, text_color.a);
+        gl_FragColor = mix(text_color, vec4(1.0), alpha);
     }
     `,
 
@@ -43,8 +50,16 @@ const material = new THREE.ShaderMaterial({
 });
 const mesh = new THREE.Mesh(plane, material);
 scene.add(mesh);
-
-
+const folder = gui.addFolder("texture-border");
+folder.add(material.uniforms.u_borderWidth, "value", 0.01, 0.1, 0.01).name("边框宽度");
+folder.add(material.uniforms.u_borderSmoothness, "value", 0.001, 0.05, 0.001).name("边框平滑度");
+folder.add(material.uniforms.u_borderRadius, "value", 0, 0.5, 0.01).name("圆角半径");
+const borderColorController = folder.addColor({
+    color: '#ffffff'
+}, 'color').name("边框颜色");
+borderColorController.onChange((value) => {
+    material.uniforms.u_borderColor.value = new THREE.Color(value);
+});
 
 // 更新动画
 function animate() {
