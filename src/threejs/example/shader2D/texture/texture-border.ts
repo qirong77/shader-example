@@ -4,6 +4,8 @@ import { gui } from "../../../common/gui";
 const plane = new THREE.PlaneGeometry(1, 1);
 const texture = new THREE.TextureLoader().load(texturePath);
 const material = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
     uniforms: {
         u_time: { value: 0 },
         u_borderWidth: { value: 0.01 },
