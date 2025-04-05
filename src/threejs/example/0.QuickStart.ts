@@ -4,6 +4,7 @@
  */
 
 import { scene, THREE } from "../common/main";
+import { gui } from "../common/gui";
 
 /**
  * @description 顶点着色器代码
@@ -26,7 +27,9 @@ const vertexShader = /* glsl */ `
 /**
  * @varying {vec2} textureCoord - 传递给片元着色器的纹理坐标
  * @varying {vec2} st - 传递给片元着色器的标准化坐标
+ * @uniform {float} uPointSize - 点的大小
  */
+uniform float uPointSize;
 varying vec2 textureCoord;
 varying vec2 st;
 
@@ -34,6 +37,7 @@ void main() {
     // uv 坐标的取值范围在 [0,1] 之间
     textureCoord = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    gl_PointSize = uPointSize;
 }
 `;
 
@@ -60,17 +64,26 @@ void main() {
     float g = fract(sin(textureCoord.y * 78.233) * 43758.5453);
     float b = fract(sin((textureCoord.x + textureCoord.y) * 43.4829) * 43758.5453);
     gl_FragColor = vec4(r, g, b, 1.0);
+    gl_FragColor = vec4(vec3(textureCoord.x), 1.0);
+
 }
 `;
 
 
-
-const geometry = new THREE.PlaneGeometry(1, 1);
+const Segment = 32
+const geometry = new THREE.PlaneGeometry(1, 1,Segment,Segment);
 const material = new THREE.ShaderMaterial({
     vertexShader,
     fragmentShader,
     side: THREE.DoubleSide,  // 双面渲染
     transparent: true,       // 启用透明
+    uniforms: {
+        uPointSize: { value: 10.0 }
+    }
 });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
+
+// 添加GUI控制
+const folder = gui.addFolder("point-size");
+folder.add(material.uniforms.uPointSize, "value", 1, 50, 1).name("点大小");
