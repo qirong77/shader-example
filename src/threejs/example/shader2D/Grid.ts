@@ -22,9 +22,8 @@ const vertexShader = /* glsl */ `
 /**
  * @varying {vec2} textureCoord - 传递给片元着色器的纹理坐标
  * @varying {vec2} st - 传递给片元着色器的标准化坐标
- * @uniform {float} uPointSize - 点的大小
  */
-uniform float uPointSize;
+uniform float uGridCount;
 varying vec2 textureCoord;
 varying vec2 st;
 
@@ -54,7 +53,8 @@ const fragmentShader = /* glsl */ `
 varying vec2 textureCoord;
 
 void main() {
-    // 使用纹理坐标生成随机的RGB颜色
+    // 当前格子的标准版化坐标，范围在[-1,1]之间
+    vec2 st 
     gl_FragColor = vec4(vec3(textureCoord.x), 1.0);
 }
 `;
@@ -64,14 +64,13 @@ const material = new THREE.ShaderMaterial({
     vertexShader,
     fragmentShader,
     side: THREE.DoubleSide, // 双面渲染
-    transparent: true, // 启用透明
     uniforms: {
-        uPointSize: { value: 10.0 },
+        uGridCount: { value: 10.0 },
     },
 });
 const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 
 // 添加GUI控制
-const folder = gui.addFolder("grid");
-folder.add(material.uniforms.uPointSize, "value", 1, 50, 1).name("点大小");
+const folder = gui.addFolder("uGridCount");
+folder.add(material.uniforms.uPointSize, "value", 10, 50, 1).name("格子数量");
