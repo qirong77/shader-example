@@ -14,7 +14,7 @@ const material = new THREE.ShaderMaterial({
         u_borderRadius: { value: 0.1 },
         u_texture: { value: texture },
         u_rhombusSize: { value: 0.1 },
-        u_rhombusOffset: { value: 0.2 },
+        u_rhombusOffset: { value: 0.9 },
     },
     vertexShader: /* glsl */ `
     varying vec2 v_uv;
