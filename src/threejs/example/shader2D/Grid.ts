@@ -21,17 +21,14 @@ import { scene, THREE } from "../../common/main";
 const vertexShader = /* glsl */ `
 /**
  * @varying {vec2} textureCoord - 传递给片元着色器的纹理坐标
- * @varying {vec2} st - 传递给片元着色器的标准化坐标
  */
 uniform float uGridCount;
 varying vec2 textureCoord;
-varying vec2 st;
 
 void main() {
     // uv 坐标的取值范围在 [0,1] 之间
     textureCoord = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    gl_PointSize = uPointSize;
 }
 `;
 
@@ -50,12 +47,28 @@ const fragmentShader = /* glsl */ `
 /**
  * @varying {vec2} textureCoord - 从顶点着色器接收的纹理坐标
  */
+uniform float uGridCount;
 varying vec2 textureCoord;
 
+// 随机数生成函数
+float random(vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+}
+
 void main() {
-    // 当前格子的标准版化坐标，范围在[-1,1]之间
-    vec2 st 
-    gl_FragColor = vec4(vec3(textureCoord.x), 1.0);
+    // 计算当前像素在哪个格子内
+    vec2 st = textureCoord * uGridCount;
+    // 获取当前格子的整数坐标（用于生成随机颜色）
+    vec2 gridIndex = floor(st);
+    // 计算在当前格子内的相对位置（范围[0,1]）
+    vec2 gridSt = fract(st);
+    
+    // 生成随机颜色
+    float randValue = random(gridIndex);
+    vec3 color = vec3(randValue);
+    
+    // 直接使用不透明的随机颜色填充
+    gl_FragColor = vec4(color, 1.0);
 }
 `;
 
@@ -73,4 +86,4 @@ scene.add(mesh);
 
 // 添加GUI控制
 const folder = gui.addFolder("uGridCount");
-folder.add(material.uniforms.uPointSize, "value", 10, 50, 1).name("格子数量");
+folder.add(material.uniforms.uGridCount, "value", 1, 50, 1).name("格子数量");
