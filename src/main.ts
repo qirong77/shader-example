@@ -5,5 +5,6 @@ import './threejs/example/Background'
 // import './threejs/example/shader3D/starBox'
 // import './threejs/example/shader2D/texture'
 // import './threejs/example/shader2D/texture/texture-border'
-import './threejs/example/shader2D/Grid'
+// import './threejs/example/shader2D/Grid'
+import './threejs/example/shader2D/Stars2'
 
