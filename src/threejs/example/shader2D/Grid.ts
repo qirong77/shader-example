@@ -56,19 +56,25 @@ float random(vec2 st) {
 }
 
 void main() {
-    // 计算当前像素在哪个格子内
-    vec2 st = textureCoord * uGridCount;
-    // 获取当前格子的整数坐标（用于生成随机颜色）
-    vec2 gridIndex = floor(st);
-    // 计算在当前格子内的相对位置（范围[0,1]）
-    vec2 gridSt = fract(st);
-    
-    // 生成随机颜色
-    float randValue = random(gridIndex);
-    vec3 color = vec3(randValue);
-    
-    // 直接使用不透明的随机颜色填充
-    gl_FragColor = vec4(color, 1.0);
+    /* 计算当前的坐标是第几个格子
+    如果当前x的坐标是0.11,有 10个格子。那么应该是第 2 个格子
+    0.11 * 10 = 1.1
+    floor(1.1) = 1
+    所以当前的坐标是第 1 个格子
+    */
+    float row = floor(textureCoord.x * uGridCount);
+    float col = floor(textureCoord.y * uGridCount);
+    // gl_FragColor = vec4(vec3(random(vec2(row,col))),1.0);
+    /* 计算归一化的坐标，范围在 [-1,1] 之间
+    例如当前的坐标是[1.5,1.5]，那么归一化的坐标是[0,0]
+    例如当前的坐标是[1.1,1.1]，那么归一化的坐标是[-0.4,0.4]
+
+     */
+    vec2 st = fract(textureCoord * uGridCount);  // 获取格子内的相对位置（0-1范围）
+    st = st * 2.0 - 1.0;  // 将相对位置映射到[-1,1]范围
+    float radius = 0.9; // 圆的半径
+    float circle = 1.0 - step(radius, length(st)); // 如果距离大于半径，返回0（黑色），否则返回1（白色）
+    gl_FragColor = vec4(vec3(0.0, 0.0, 0.0), circle); // 使用红色绘制圆形
 }
 `;
 
